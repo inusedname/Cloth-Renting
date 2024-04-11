@@ -1,0 +1,22 @@
+package dev.vstd.clothes_renting.data.entity
+
+import jakarta.persistence.*
+
+@Entity
+class InventoryItemLogEntity(
+    @Id @GeneratedValue
+    private val id: Long = 0,
+
+    val quantity: Int,
+    val action: String,
+
+    @ManyToOne
+    @JoinColumn(name = "inventory_item_id")
+    val inventoryItem: InventoryItemEntity,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: UserEntity,
+
+    val timestamp: Long,
+)

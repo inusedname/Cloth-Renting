@@ -11,6 +11,9 @@ class SellerEntity(
     @Id @GeneratedValue
     private val id: Long = 0,
 
+    val name: String,
+    val contact: String?,
+
     @OneToMany(mappedBy = "seller")
     val clothes: List<ClothEntity> = emptyList(),
 )

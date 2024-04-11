@@ -13,13 +13,9 @@ class ClothEntity(
 
     val price: Long,
 
-    var onInventory: Int = 0,
+    val previewImage: String,
 
-    var onListing: Int = 0,
-
-    var onShipping: Int = 0,
-
-    var onBought: Int = 0,
+    val description: String,
 
     @ManyToOne @JoinColumn(name = "seller_id", nullable = false)
     val seller: SellerEntity? = null,

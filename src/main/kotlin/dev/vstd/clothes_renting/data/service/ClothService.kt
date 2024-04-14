@@ -6,11 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ClothService {
-
-    @Autowired
-    private lateinit var clothRepository: ClothRepository
-
+class ClothService(private val clothRepository: ClothRepository) {
     fun saveCloth(cloth: ClothEntity) {
         clothRepository.save(cloth)
     }

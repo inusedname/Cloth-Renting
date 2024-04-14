@@ -6,10 +6,8 @@ import jakarta.persistence.*
 class InventoryItemEntity(
     @Id @GeneratedValue
     private val id: Long = 0,
-
+    val quantityInStock: Int = 0,
     @OneToOne
     @JoinColumn(name = "cloth_id")
-    val clothEntity: ClothEntity,
-
-    val quantityInStock: Int = 0,
+    val clothEntity: ClothEntity
 )

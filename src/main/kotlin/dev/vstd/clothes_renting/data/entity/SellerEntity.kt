@@ -10,10 +10,10 @@ import jakarta.persistence.OneToMany
 class SellerEntity(
     @Id @GeneratedValue
     private val id: Long = 0,
-
     val name: String,
-    val contact: String?,
-
+    val note: String,
+    val email: String,
+    val telephone: String,
     @OneToMany(mappedBy = "seller")
     val clothes: List<ClothEntity> = emptyList(),
 )

@@ -11,7 +11,4 @@ class CategoryEntity(
     private val id: Long = 0,
 
     val name: String,
-
-    @OneToMany(mappedBy = "category")
-    val clothes: List<ClothEntity> = emptyList(),
 )

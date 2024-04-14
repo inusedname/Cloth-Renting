@@ -1,5 +1,6 @@
 package dev.vstd.clothes_renting.controller
 
+import dev.vstd.clothes_renting.data.service.InventoryService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/inventory")
-class InventoryController {
+class InventoryController(private val inventoryService: InventoryService) {
 
     @GetMapping("/request-product")
     fun getRequestMoreProduct(): String {

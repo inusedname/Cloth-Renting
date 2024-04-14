@@ -7,7 +7,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 
 @Entity
-class CategoriesOfCloth(
+class CategoriesOfClothEntity(
     @Id @GeneratedValue
     val id: Long = 0,
 

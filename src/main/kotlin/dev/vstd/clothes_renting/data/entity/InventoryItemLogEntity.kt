@@ -5,7 +5,7 @@ import jakarta.persistence.*
 @Entity
 class InventoryItemLogEntity(
     @Id @GeneratedValue
-    private val id: Long = 0,
+    val id: Long = 0,
     val quantity: Int,
     val action: String,
     val timestamp: Long,

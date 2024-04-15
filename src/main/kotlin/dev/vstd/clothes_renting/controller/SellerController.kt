@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/seller")
 class SellerController(private val sellerService: SellerService) {
 
-    @GetMapping("/dashboard")
+    @GetMapping("")
     fun dashboard(): String {
         TODO("Not yet implemented")
     }

@@ -20,7 +20,7 @@ class InventoryController(private val inventoryService: InventoryService) {
         TODO("Not yet implemented")
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("")
     fun inventoryStatus(): String {
         TODO("Not yet implemented")
     }

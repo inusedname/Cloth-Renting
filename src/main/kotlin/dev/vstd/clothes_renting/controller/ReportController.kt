@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/report")
 class ReportController(private val reportService: ReportService) {
 
-    @GetMapping("/dashboard")
+    @GetMapping("")
     fun dashboard(): String {
         TODO()
     }

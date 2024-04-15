@@ -1,5 +1,6 @@
 package dev.vstd.clothes_renting.controller
 
+import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.Role
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import jakarta.servlet.http.HttpServletRequest
@@ -9,18 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class MenuController {
 
-    @GetMapping("/")
+    @GetMapping("")
     fun home(request: HttpServletRequest): String {
-        val user: UserEntity = request.getAttribute("user") as UserEntity? ?: return "redirect:/login"
+        val user: UserEntity? = request.session.getAttribute(Constants.ATTR_USER) as UserEntity?
+        if (user == null)
+            return "redirect:/login"
 
-        return when(user.role) {
-            Role.ADMIN.id -> {
-                "redirect:/admin"
-            }
-
-            else -> {
-                "redirect:/user"
-            }
+        when(user.role) {
+            Role.INVENTOR.id -> return "dashboard_clothes"
+            Role.MANAGER.id -> return "dashboard_inventor"
+            else -> return "redirect:/login"
         }
     }
 }

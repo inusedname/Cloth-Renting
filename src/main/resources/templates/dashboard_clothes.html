@@ -10,13 +10,13 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="container">
-    <a href="#" class="btn btn-secondary">&lt; Quay lại</a>
+<div class="container my-3">
+    <a href=".." class="btn btn-secondary">Quay lại</a>
     <h2 class="text-center">Quản lý trang phục trong kho</h2>
 
-    <p class="text-muted">Kết quả: 1-10 trên 78 kết quả</p>
+    <p class="text-muted" th:text="|Kết quả 1-10 trong tổng ${records.size()}|"></p>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered col-11 justify-content-center" style="table-layout: fixed; word-wrap: break-word">
         <thead>
         <tr>
             <th>id</th>
@@ -32,15 +32,15 @@
         </thead>
         <tbody>
         <tr th:each="record : ${records}">
-            <td th:text="${record.id}">1</td>
-            <td th:text="${record.nguoiBan}">1</td>
-            <td th:text="${record.ten}">1</td>
-            <td><a th:href="${record.hinhAnh}" th:text="${record.hinhAnh}"></a>1</td>
-            <td th:text="${record.moTa}">1</td>
-            <td th:text="${record.giaTien}">1</td>
-            <td><a href="#" class="btn btn-primary">Sửa</a></td>
-            <td><a href="#" class="btn btn-danger">Xóa</a></td>
-            <td><a href="#" class="btn btn-info">Xem</a></td>
+            <td th:text="${record.id}"></td>
+            <td th:text="${record.seller.name}"></td>
+            <td th:text="${record.name}"></td>
+            <td><a th:href="${record.previewImage}" th:text="${record.previewImage}"></a></td>
+            <td th:text="${record.description}"></td>
+            <td th:text="${record.price}"></td>
+            <td><a th:href="@{'/cloth/edit?id=' + ${record.id}}" class="btn btn-primary">Sửa</a></td>
+            <td><a th:href="@{'/cloth/delete?id=' + ${record.id}}" class="btn btn-danger">Xóa</a></td>
+            <td><a th:href="@{'/cloth/detail?id=' + ${record.id}}" class="btn btn-info">Xem</a></td>
         </tr>
         </tbody>
     </table>
@@ -51,7 +51,7 @@
             <span class="mx-2">Trang 1</span>
             <button class="btn btn-secondary">Next</button>
         </div>
-        <a href="#" class="btn btn-success">Thêm sản phẩm mới</a>
+        <a th:href="@{/cloth/new}" class="btn btn-success">Thêm sản phẩm mới</a>
     </div>
 </div>
 </body>

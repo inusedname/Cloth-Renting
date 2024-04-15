@@ -8,7 +8,7 @@ import jakarta.persistence.OneToMany
 @Entity
 class CategoryEntity(
     @Id @GeneratedValue
-    private val id: Long = 0,
+    val id: Long = 0,
 
     val name: String,
 )

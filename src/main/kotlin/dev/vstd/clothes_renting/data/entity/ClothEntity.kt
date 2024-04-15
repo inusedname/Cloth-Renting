@@ -10,7 +10,7 @@ import jakarta.persistence.OneToMany
 @Entity
 class ClothEntity(
     @Id @GeneratedValue
-    private val id: Long = 0,
+    val id: Long = 0,
     val name: String,
     val price: Long,
     val previewImage: String,

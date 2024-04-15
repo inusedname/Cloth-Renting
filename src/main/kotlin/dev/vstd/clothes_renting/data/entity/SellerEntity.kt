@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany
 @Entity
 class SellerEntity(
     @Id @GeneratedValue
-    private val id: Long = 0,
+    val id: Long = 0,
     val name: String,
     val note: String,
     val email: String,

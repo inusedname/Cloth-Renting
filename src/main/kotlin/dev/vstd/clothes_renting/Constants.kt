@@ -1,4 +1,5 @@
 package dev.vstd.clothes_renting
 
-class Constants {
+object Constants {
+    const val ATTR_USER = "currentUser"
 }

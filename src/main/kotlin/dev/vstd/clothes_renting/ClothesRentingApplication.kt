@@ -3,9 +3,17 @@ package dev.vstd.clothes_renting
 import dev.vstd.clothes_renting.data.entity.ClothEntity
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean
+import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
-class ClothesRentingApplication
+class ClothesRentingApplication {
+
+	@Bean
+	fun sessionListenerRegistrationBean(): ServletListenerRegistrationBean<Startup> {
+		return ServletListenerRegistrationBean(Startup())
+	}
+}
 
 fun main(args: Array<String>) {
 	runApplication<ClothesRentingApplication>(*args)

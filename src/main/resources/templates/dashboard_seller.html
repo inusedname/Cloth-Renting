@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý nhà cung cấp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-4">
+    <a href="#" class="btn btn-secondary">&lt; Quay lại</a>
+    <h2 class="text-center mt-3">Quản lý nhà cung cấp</h2>
+
+    <div class="row mt-3">
+        <div class="col-md-10">
+            <p th:text="'Kết quả: 1-10 trên 78 kết quả'"></p>
+        </div>
+        <div class="col-md-2 text-right">
+            <button class="btn btn-secondary">Prev</button>
+            <span class="mx-2">&lt; Trang 1 &gt;</span>
+            <button class="btn btn-secondary">Next</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Tên người bán</th>
+            <th>Thông tin liên hệ</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${records}">
+            <td th:text="${record.id}"></td>
+            <td th:text="${record.tenNguoiBan}"></td>
+            <td th:text="${record.thongTinLienHe}"></td>
+            <td><button class="btn btn-primary btn-sm">Sửa</button></td>
+            <td><button class="btn btn-danger btn-sm">Xóa</button></td>
+            <td><button class="btn btn-info btn-sm">Xem</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <button class="btn btn-success">Thêm sản phẩm mới</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+</body>
+</html>

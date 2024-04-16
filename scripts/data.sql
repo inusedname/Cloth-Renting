@@ -12,3 +12,15 @@ VALUES (1, 'Áo thun', 100000, 1, 'https://dosi-in.com/images/detailed/42/CDL3_1
          (5, 'Áo khoác', 500000, 2, 'https://laforce.vn/wp-content/uploads/2022/07/phoi-do-voi-quan-jean-nam.jpg', 'description'),
          (6, 'Áo len', 600000, 3, 'https://laforce.vn/wp-content/uploads/2022/07/phoi-do-voi-quan-jean-nam.jpg', 'description');
 ;
+
+UPDATE seller_entity_seq t
+SET t.next_val = 4
+WHERE t.next_val = 1;
+
+UPDATE category_entity_seq t
+SET t.next_val = 4
+WHERE t.next_val = 1;
+
+UPDATE cloth_entity_seq t
+SET t.next_val = 7
+WHERE t.next_val = 1;

@@ -14,4 +14,8 @@ class SellerService(private val sellerRepo: SellerRepository) {
     fun getSellers(): List<SellerEntity> {
         return sellerRepo.findAll()
     }
+
+    fun getSellerById(id: Long): SellerEntity? {
+        return sellerRepo.findById(id).orElse(null)
+    }
 }

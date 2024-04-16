@@ -7,10 +7,11 @@
           integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-    <h1>Tình trạng kho</h1>
+<div class="container my-3">
+    <a href=".." class="btn btn-secondary">Quay lại</a>
+    <h2 class="text-center">Tình trạng kho</h2>
 
-    <form action="#" method="get">
+    <form action="" method="get">
         <div class="form-group row">
             <label for="search" class="col-sm-2 col-form-label">Tìm kiếm theo tên sản phẩm...</label>
             <div class="col-sm-8">
@@ -34,11 +35,11 @@
         </thead>
         <tbody>
         <tr th:each="record : ${records}">
-            <td th:text="${record.productName}">Áo thun A</td>
-            <td th:text="${record.quantity}">135</td>
-            <td th:text="${record.lastUpdatedDate}">01/01/2024</td>
-            <td th:text="${record.supplierName}">Yody</td>
-            <td><a href="#">Xem lịch sử</a></td>
+            <td th:text="${record.clothEntity.name}"></td>
+            <td th:text="${record.quantityInStock}"></td>
+            <td th:text="${record.lastUpdate.toLocaleString()}"></td>
+            <td th:text="${record.clothEntity.seller.name}"></td>
+            <td><a th:href="@{'/inventory/history?id=' + ${record.clothEntity.id}}">Xem lịch sử</a></td>
         </tr>
         </tbody>
     </table>
@@ -48,9 +49,9 @@
             <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#"></a></li>
-            <li class="page-item"><a class="page-link" href="#"></a></li>
-            <li class="page-item"><a class="page-link" href="#"></a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
                 <a class="page-link" href="#">Next</a>
             </li>
@@ -59,10 +60,10 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <a href="#" class="btn btn-secondary">Xem lịch sử thay đổi gần đây</a>
+            <a th:href="@{/inventory/history}" class="btn btn-secondary">Xem lịch sử thay đổi gần đây</a>
         </div>
         <div class="col-sm-6 text-right">
-            <a href="#" class="btn btn-primary">Cập nhật</a>
+            <a th:href="@{/inventory/update}" class="btn btn-primary">Cập nhật</a>
         </div>
     </div>
 </div>

@@ -13,6 +13,10 @@ VALUES (1, 'Áo thun', 100000, 1, 'https://dosi-in.com/images/detailed/42/CDL3_1
          (6, 'Áo len', 600000, 3, 'https://laforce.vn/wp-content/uploads/2022/07/phoi-do-voi-quan-jean-nam.jpg', 'description');
 ;
 
+SET @today = CURDATE();
+INSERT INTO inventory_item_entity (id, cloth_id, quantity_in_stock, last_update)
+VALUES (1, 1, 0, @today), (2, 2, 0, @today), (3, 3, 0, @today), (4, 4, 0, @today), (5, 5, 0, @today), (6, 6, 0, @today);
+
 UPDATE seller_entity_seq t
 SET t.next_val = 4
 WHERE t.next_val = 1;
@@ -22,5 +26,9 @@ SET t.next_val = 4
 WHERE t.next_val = 1;
 
 UPDATE cloth_entity_seq t
+SET t.next_val = 7
+WHERE t.next_val = 1;
+
+UPDATE inventory_item_entity_seq t
 SET t.next_val = 7
 WHERE t.next_val = 1;

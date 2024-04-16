@@ -1,6 +1,7 @@
 package dev.vstd.clothes_renting.data.entity
 
 import jakarta.persistence.*
+import java.sql.Date
 
 @Entity
 class InventoryItemLogEntity(
@@ -8,7 +9,7 @@ class InventoryItemLogEntity(
     val id: Long = 0,
     val quantity: Int,
     val action: String,
-    val timestamp: Long,
+    val date: Date,
     @ManyToOne
     @JoinColumn(name = "inventory_item_id")
     val inventoryItem: InventoryItemEntity,

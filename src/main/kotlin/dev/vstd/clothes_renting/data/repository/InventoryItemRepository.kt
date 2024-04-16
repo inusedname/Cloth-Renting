@@ -7,4 +7,7 @@ interface InventoryItemRepository: JpaRepository<InventoryItemEntity, Long> {
     fun findByClothEntityName(name: String): List<InventoryItemEntity> {
         return findAll().filter { it.clothEntity.name == name }
     }
+    fun findByClothEntityId(id: Long): InventoryItemEntity {
+        return findAll().find { it.clothEntity.id == id }!!
+    }
 }

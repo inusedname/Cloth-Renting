@@ -2,9 +2,11 @@ package dev.vstd.clothes_renting.data.service
 
 import dev.vstd.clothes_renting.data.entity.InventoryItemEntity
 import dev.vstd.clothes_renting.data.entity.InventoryItemLogEntity
+import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.repository.InventoryItemRepository
 import dev.vstd.clothes_renting.data.repository.InventoryLogRepository
 import org.springframework.stereotype.Service
+import java.sql.Date
 
 @Service
 class InventoryService(
@@ -25,5 +27,40 @@ class InventoryService(
     }
     fun filterByItemId(id: Long): List<InventoryItemLogEntity> {
         return inventoryLogRepository.findByInventoryItemId(id)
+    }
+    fun buyIn(user: UserEntity, productId: Long, quantity: Int, date: String) {
+        val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
+        val logEntity = InventoryItemLogEntity(
+            quantity = quantity,
+            action = "BUY_IN",
+            date = Date.valueOf(date),
+            user = user,
+            inventoryItem = inventoryItemEntity
+        )
+        inventoryItemEntity.apply {
+            quantityInStock += quantity
+            lastUpdate = Date.valueOf(date)
+        }
+
+        inventoryLogRepository.save(logEntity)
+        inventoryItemRepository.save(inventoryItemEntity)
+    }
+
+    fun sellOut(user: UserEntity, productId: Long, quantity: Int, date: String) {
+        val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
+        val logEntity = InventoryItemLogEntity(
+            quantity = quantity,
+            action = "SELL_OUT",
+            date = Date.valueOf(date),
+            user = user,
+            inventoryItem = inventoryItemEntity
+        )
+        inventoryItemEntity.apply {
+            quantityInStock -= quantity
+            lastUpdate = Date.valueOf(date)
+        }
+
+        inventoryLogRepository.save(logEntity)
+        inventoryItemRepository.save(inventoryItemEntity)
     }
 }

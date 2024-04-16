@@ -13,11 +13,11 @@
 <div class="container my-3">
     <a href=".." class="btn btn-secondary">Quay lại</a>
     <h2 class="text-center">Cập nhật kho hàng</h2>
-    <form action="#">
+    <form method="post" th:action="@{/inventory/update}">
         <div class="form-group row">
             <label for="product" class="col-sm-2 col-form-label">Chọn mặt hàng</label>
             <div class="col-sm-10">
-                <select class="form-control" id="product">
+                <select class="form-control" id="product" th:name="productId">
                     <option value="">Chưa chọn</option>
                     <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
                 </select>
@@ -26,22 +26,22 @@
         <div class="form-group row">
             <label for="type" class="col-sm-2 col-form-label">Nhập/Xuất hàng?</label>
             <div class="col-sm-10">
-                <select class="form-control" id="type">
-                    <option value="import">Nhập hàng</option>
-                    <option value="export">Xuất hàng</option>
+                <select class="form-control" id="type" th:name="type">
+                    <option value="0">Nhập hàng</option>
+                    <option value="1">Xuất hàng</option>
                 </select>
             </div>
         </div>
         <div class="form-group row">
-            <label for="quantity" class="col-sm-2 col-form-label">Chọn số lượng nhập thêm</label>
+            <label for="quantity" class="col-sm-2 col-form-label">Chọn số lượng muốn nhập thêm/xuất kho</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity">
+                <input type="number" class="form-control" id="quantity" th:name="quantity">
             </div>
         </div>
         <div class="form-group row">
             <label for="date" class="col-sm-2 col-form-label">Thời gian tạo hóa đơn</label>
             <div class="col-sm-10">
-                <input type="date" class="form-control" id="date">
+                <input type="date" class="form-control" id="date" th:name="date">
             </div>
         </div>
         <div class="text-center">

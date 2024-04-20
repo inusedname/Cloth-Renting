@@ -17,8 +17,8 @@ class MenuController {
             return "redirect:/login"
 
         when(user.role) {
-            Role.INVENTOR.id -> return "dashboard_clothes"
-            Role.MANAGER.id -> return "dashboard_inventor"
+            Role.INVENTOR.id -> return "dashboard_inventor"
+            Role.MANAGER.id -> return "dashboard_manager"
             else -> return "redirect:/login"
         }
     }

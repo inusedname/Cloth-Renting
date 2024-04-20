@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý nhà cung cấp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+<div class="container my-3">
+    <a href="#" class="btn btn-secondary">&lt; Quay lại</a>
+    <h2 class="text-center mt-3">Quản lý nhà cung cấp</h2>
+
+    <div class="row mt-3">
+        <div class="col-md-10">
+            <p th:text="'Kết quả: 1-10 trên 78 kết quả'"></p>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Tên người bán</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Ghi chú</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="seller : ${sellers}">
+            <td th:text="${seller.id}"></td>
+            <td th:text="${seller.name}"></td>
+            <td th:text="${seller.email}"></td>
+            <td th:text="${seller.telephone}"></td>
+            <td th:text="${seller.note}"></td>
+            <td><button class="btn btn-primary btn-sm">Sửa</button></td>
+            <td><button class="btn btn-danger btn-sm">Xóa</button></td>
+            <td><button class="btn btn-info btn-sm">Xem</button></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="col-md-2 float-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <button class="btn btn-primary float-right">Thêm sản phẩm mới</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+</body>
+</html>

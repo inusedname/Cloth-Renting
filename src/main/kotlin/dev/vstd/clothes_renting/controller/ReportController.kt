@@ -2,7 +2,6 @@ package dev.vstd.clothes_renting.controller
 
 import dev.vstd.clothes_renting.data.service.ReportService
 import org.springframework.stereotype.Controller
-import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
@@ -12,7 +11,8 @@ class ReportController(private val reportService: ReportService) {
 
     @GetMapping("")
     fun dashboard(): String {
-        TODO()
+        // TODO
+        return "dashboard_report"
     }
 
     @GetMapping("/download")

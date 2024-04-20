@@ -20,7 +20,7 @@ class InventoryService(
         return inventoryItemRepository.findAll()
     }
     fun filterByName(name: String): List<InventoryItemEntity> {
-        return inventoryItemRepository.findByClothEntityName(name)
+        return inventoryItemRepository.findByClothEntityNameContainingIgnoreCase(name)
     }
     fun getAllHistories(): List<InventoryItemLogEntity> {
         return inventoryLogRepository.findAll()

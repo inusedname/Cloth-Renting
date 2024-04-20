@@ -12,4 +12,6 @@ object Constants {
     const val ATTR_PRODUCTS = "products"
     const val BUY_IN = 0
     const val SELL_OUT = 1
+
+    const val ATTR_ERROR_MSG = "errorMessage"
 }

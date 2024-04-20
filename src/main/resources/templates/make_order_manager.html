@@ -6,40 +6,56 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
+<div class="container my-3">
     <a href="#" class="btn btn-secondary">&lt; Quay lại</a>
-    <h1>Nhập hàng</h1>
-    <form>
+    <h1 class="text-center">Nhập hàng</h1>
+    <form action="request-product" method="post">
         <div class="form-group row">
             <label for="supplier" class="col-sm-2 col-form-label">Nhà cung cấp</label>
             <div class="col-sm-10">
-                <select class="form-control" id="supplier" th:field="${supplierId}">
-                    <option value="">Chưa chọn</option>
+                <select class="form-control" id="supplier" th:name="sellerId">
+                    <option value="-1">Chưa chọn</option>
                     <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.name}"></option>
                 </select>
+                <span th:if="${errorMessage != null}" th:text="${errorMessage}" class="error text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <label for="clothes" class="col-sm-2 col-form-label">Tên quần áo</label>
             <div class="col-sm-10">
-                <select class="form-control" id="clothes" disabled>
+                <select class="form-control" id="clothes" th:name="clothId" disabled>
                     <option value="">Chưa chọn</option>
-                    <option th:each="cloth : ${clothes}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
+                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
                 </select>
             </div>
         </div>
         <div class="form-group row">
             <label for="quantity" class="col-sm-2 col-form-label">Số lượng</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity" value="0" disabled>
+                <input type="number" class="form-control" id="quantity" value="0" th:name="quantity" disabled>
             </div>
         </div>
         <a href="#" class="text-danger">Nhấn vào đây để ký điện tử*</a>
         <br>
-        <button type="submit" class="btn btn-primary">Gửi yêu cầu nhập hàng</button>
+        <button type="submit" class="float-right btn btn-primary">Gửi yêu cầu nhập hàng</button>
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(() => {
+        $('#supplier').change(() => {
+            const supplierId = $('#supplier').val();
+            console.log(supplierId)
+            if (supplierId === '-1') {
+                $('#clothes').prop('disabled', true);
+                $('#quantity').prop('disabled', true);
+            } else {
+                $('#clothes').prop('disabled', false);
+                $('#quantity').prop('disabled', false);
+            }
+        });
+    });
+</script>
 </body>
 </html>

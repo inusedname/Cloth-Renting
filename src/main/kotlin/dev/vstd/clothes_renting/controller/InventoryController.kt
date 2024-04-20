@@ -5,6 +5,7 @@ import dev.vstd.clothes_renting.controller.form.UpdateInventoryForm
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.service.ClothService
 import dev.vstd.clothes_renting.data.service.InventoryService
+import dev.vstd.clothes_renting.data.service.SellerService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -13,17 +14,52 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.net.URLEncoder
 import java.util.logging.Logger
 
 @Controller
 @RequestMapping("/inventory")
-class InventoryController(private val inventoryService: InventoryService, private val clothService: ClothService) {
+class InventoryController(
+    private val inventoryService: InventoryService,
+    private val clothService: ClothService,
+    private val sellerService: SellerService
+) {
     private val logger = Logger.getLogger(InventoryController::class.qualifiedName)
 
     @GetMapping("/request-product")
-    fun getRequestMoreProduct(): String {
+    fun getRequestMoreProduct(model: Model, @RequestParam(required = false) errorMessage: String?): String {
+        model[Constants.ATTR_SELLERS] = sellerService.getSellers()
+        model[Constants.ATTR_PRODUCTS] = clothService.getAllClothes()
+        if (errorMessage != null) {
+            model[Constants.ATTR_ERROR_MSG] = errorMessage
+        }
         return "make_order_manager"
     }
+
+    @PostMapping("/request-product")
+    fun postRequestMoreProduct(body: RequestMoreProductBody, redirectAttributes: RedirectAttributes): String {
+        logger.info("yooooooo")
+        val cloth = clothService.findClothById(body.clothId.toLong())
+        if (cloth?.seller?.id?.toInt() != body.sellerId) {
+            redirectAttributes[Constants.ATTR_ERROR_MSG] = "Lỗi: Người bán không chính xác. Gợi ý: ${cloth!!.seller!!.name}"
+            return "redirect:/inventory/request-product"
+        }
+        // Encode subject and body
+        val encodedSubject = URLEncoder.encode("Đặt hàng", "UTF-8").replace("+", "%20")
+        val encodedBody = URLEncoder.encode("Chào bạn, tôi muốn đặt thêm ${body.quantity} sản phẩm ${cloth.name}", "UTF-8").replace("+", "%20")
+
+        // Construct mailto URI
+        val intent = "mailto:${cloth.seller.email}?subject=$encodedSubject&body=$encodedBody"
+
+        return "redirect:$intent"
+    }
+
+    data class RequestMoreProductBody(
+        val sellerId: Int,
+        val clothId: Int,
+        val quantity: Int
+    )
 
     @GetMapping("")
     fun dashboard(model: Model, @RequestParam(required = false) search: String?): String {

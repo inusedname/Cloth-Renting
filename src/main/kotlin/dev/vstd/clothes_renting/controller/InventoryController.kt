@@ -1,6 +1,7 @@
 package dev.vstd.clothes_renting.controller
 
 import dev.vstd.clothes_renting.Constants
+import dev.vstd.clothes_renting.controller.form.RequestMoreProductForm
 import dev.vstd.clothes_renting.controller.form.UpdateInventoryForm
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.service.ClothService
@@ -38,7 +39,7 @@ class InventoryController(
     }
 
     @PostMapping("/request-product")
-    fun postRequestMoreProduct(body: RequestMoreProductBody, redirectAttributes: RedirectAttributes): String {
+    fun postRequestMoreProduct(body: RequestMoreProductForm, redirectAttributes: RedirectAttributes): String {
         logger.info("yooooooo")
         val cloth = clothService.findClothById(body.clothId.toLong())
         if (cloth?.seller?.id?.toInt() != body.sellerId) {
@@ -55,11 +56,7 @@ class InventoryController(
         return "redirect:$intent"
     }
 
-    data class RequestMoreProductBody(
-        val sellerId: Int,
-        val clothId: Int,
-        val quantity: Int
-    )
+
 
     @GetMapping("")
     fun dashboard(model: Model, @RequestParam(required = false) search: String?): String {

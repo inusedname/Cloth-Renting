@@ -1,6 +1,7 @@
 package dev.vstd.clothes_renting.controller
 
 import dev.vstd.clothes_renting.Constants
+import dev.vstd.clothes_renting.controller.form.LoginForm
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.service.AuthService
 import jakarta.servlet.http.HttpServletRequest
@@ -23,19 +24,16 @@ class LoginController(private val authService: AuthService) {
     }
 
     @PostMapping("/login")
-    fun postLogin(loginBody: LoginBody, request: HttpServletRequest): String {
-        return if (authService.login(loginBody.email, loginBody.password)) {
-            request.session.setAttribute(Constants.ATTR_USER, authService.findUserByEmail(loginBody.email))
+    fun postLogin(loginForm: LoginForm, request: HttpServletRequest): String {
+        return if (authService.login(loginForm.email, loginForm.password)) {
+            request.session.setAttribute(Constants.ATTR_USER, authService.findUserByEmail(loginForm.email))
             "redirect:/"
         } else {
             "redirect:/login"
         }
     }
 
-    class LoginBody(
-        val email: String,
-        val password: String
-    )
+
 
     @GetMapping("/signout")
     fun signOut(request: HttpServletRequest): String {

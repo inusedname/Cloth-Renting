@@ -10,9 +10,10 @@ object Constants {
 
     /** for manage_inventory.html */
     const val ATTR_PRODUCTS = "products"
-    const val BUY_IN = 0
-    const val SELL_OUT = 1
+    const val BUY_IN = "BUY_IN"
+    const val SELL_OUT = "SELL_OUT"
 
     const val ATTR_ERROR_MSG = "errorMessage"
     const val ATTR_SELLER_ITEM = "sellerItem"
+    const val ATTR_SELLER_RATINGS = "sellerRatings"
 }

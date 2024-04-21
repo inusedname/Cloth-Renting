@@ -13,5 +13,7 @@ class ClothEntity(
     @ManyToOne @JoinColumn(name = "seller_id", nullable = false)
     val seller: SellerEntity? = null,
     @OneToMany(mappedBy = "cloth")
-    val categories: Set<CategoriesOfClothEntity>? = null
+    val categories: Set<CategoriesOfClothEntity>? = null,
+    @OneToOne(mappedBy = "clothEntity")
+    val inventoryItem: InventoryItemEntity? = null
 )

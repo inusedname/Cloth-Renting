@@ -1,5 +1,6 @@
 package dev.vstd.clothes_renting.data.service
 
+import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.data.entity.InventoryItemEntity
 import dev.vstd.clothes_renting.data.entity.InventoryItemLogEntity
 import dev.vstd.clothes_renting.data.entity.UserEntity
@@ -32,7 +33,7 @@ class InventoryService(
         val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
-            action = "BUY_IN",
+            action = Constants.BUY_IN,
             date = Date.valueOf(date),
             user = user,
             inventoryItem = inventoryItemEntity
@@ -50,7 +51,7 @@ class InventoryService(
         val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
-            action = "SELL_OUT",
+            action = Constants.SELL_OUT,
             date = Date.valueOf(date),
             user = user,
             inventoryItem = inventoryItemEntity

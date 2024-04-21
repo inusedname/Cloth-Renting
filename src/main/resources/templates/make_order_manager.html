@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Nhập hàng</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container my-3">
-    <a href="#" class="btn btn-secondary">&lt; Quay lại</a>
+    <a th:href="@{|${'../'}|}" class="btn btn-secondary">Quay lại</a>
     <h1 class="text-center">Nhập hàng</h1>
     <form action="request-product" method="post">
         <div class="form-group row">
@@ -58,4 +58,7 @@
     });
 </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/app.js"></script>
 </html>

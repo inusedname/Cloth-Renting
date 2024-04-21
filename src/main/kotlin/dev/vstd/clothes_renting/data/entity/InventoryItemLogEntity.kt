@@ -5,7 +5,7 @@ import java.sql.Date
 
 @Entity
 class InventoryItemLogEntity(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     val quantity: Int,
     val action: String,

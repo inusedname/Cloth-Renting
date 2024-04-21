@@ -1,6 +1,6 @@
-package dev.vstd.clothes_renting.domain
+package dev.vstd.clothes_renting.controller.form
 
-data class Cloth(
+data class UpdateClothForm(
     val id: Long? = null,
     val name: String,
     val previewImage: String,

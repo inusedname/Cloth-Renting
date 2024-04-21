@@ -1,8 +1,8 @@
 INSERT INTO user_entity (id, username, email, password, `role`)
 VALUES (1, 'admin', 'admin@gmail.com', 'admin', 1), (2, 'user', 'user@gmail.com', 'user', 0);
 
-INSERT INTO seller_entity (id, name, email, telephone)
-VALUES (1, 'Yody', 'a@gmail.com', '123'), (2, 'Nike', 'a@gmail.com', '123'), (3, 'Adidas', 'a@gmail.com', '123');
+INSERT INTO seller_entity (id, name, email, telephone, address)
+VALUES (1, 'Yody', 'a@gmail.com', '123', 'Hoàng Cầu, Hà Đông, Hà Nội'), (2, 'Nike', 'a@gmail.com', '123', 'Vinh, Nghệ An'), (3, 'Adidas', 'a@gmail.com', '123', 'Quận 1, Thành Phố HCM');
 
 INSERT INTO category_entity (id, name)
 VALUES (1, 'Size XL'), (2, 'Hồng'), (3, 'Thu Xuân 2024');
@@ -19,23 +19,3 @@ VALUES (1, 'Áo thun', 100000, 1, 'https://dosi-in.com/images/detailed/42/CDL3_1
 SET @today = CURDATE();
 INSERT INTO inventory_item_entity (id, cloth_id, quantity_in_stock, last_update)
 VALUES (1, 1, 0, @today), (2, 2, 0, @today), (3, 3, 0, @today), (4, 4, 0, @today), (5, 5, 0, @today), (6, 6, 0, @today);
-
-UPDATE user_entity_seq t
-SET t.next_val = 3
-WHERE t.next_val = 1;
-
-UPDATE seller_entity_seq t
-SET t.next_val = 4
-WHERE t.next_val = 1;
-
-UPDATE category_entity_seq t
-SET t.next_val = 4
-WHERE t.next_val = 1;
-
-UPDATE cloth_entity_seq t
-SET t.next_val = 7
-WHERE t.next_val = 1;
-
-UPDATE inventory_item_entity_seq t
-SET t.next_val = 7
-WHERE t.next_val = 1;

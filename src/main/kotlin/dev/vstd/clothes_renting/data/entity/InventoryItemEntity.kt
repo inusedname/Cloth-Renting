@@ -6,7 +6,7 @@ import java.sql.Timestamp
 
 @Entity
 class InventoryItemEntity(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     var quantityInStock: Int = 0,
     @OneToOne

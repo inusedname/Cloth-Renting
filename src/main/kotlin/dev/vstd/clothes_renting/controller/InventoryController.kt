@@ -41,21 +41,34 @@ class InventoryController(
     @PostMapping("/request-product")
     fun postRequestMoreProduct(body: RequestMoreProductForm, redirectAttributes: RedirectAttributes): String {
         logger.info("yooooooo")
-        val cloth = clothService.findClothById(body.clothId.toLong())
-        if (cloth?.seller?.id?.toInt() != body.sellerId) {
-            redirectAttributes[Constants.ATTR_ERROR_MSG] = "Lỗi: Người bán không chính xác. Gợi ý: ${cloth!!.seller!!.name}"
-            return "redirect:/inventory/request-product"
-        }
-        // Encode subject and body
         val encodedSubject = URLEncoder.encode("Đặt hàng", "UTF-8").replace("+", "%20")
-        val encodedBody = URLEncoder.encode("Chào bạn, tôi muốn đặt thêm ${body.quantity} sản phẩm ${cloth.name}", "UTF-8").replace("+", "%20")
+        var bodyStr = "Chào bạn, tôi muốn đặt thêm:\n"
 
         // Construct mailto URI
-        val intent = "mailto:${cloth.seller.email}?subject=$encodedSubject&body=$encodedBody"
+        if (body.clothId1.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId1.toLong())
+            bodyStr += "${body.quantity1} sản phẩm ${cloth!!.name}\n"
+        }
+        if (body.clothId2.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId2.toLong())
+            bodyStr += "${body.quantity2} sản phẩm ${cloth!!.name}\n"
+        }
+        if (body.clothId3.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId3.toLong())
+            bodyStr += "${body.quantity3} sản phẩm ${cloth!!.name}\n"
+        }
+
+//        if (cloth?.seller?.id?.toInt() != body.sellerId) {
+//            redirectAttributes[Constants.ATTR_ERROR_MSG] = "Lỗi: Người bán không chính xác. Gợi ý: ${cloth!!.seller!!.name}"
+//            return "redirect:/inventory/request-product"
+//        }
+        // Encode subject and body
+        val encodedBody = URLEncoder.encode(bodyStr, "UTF-8").replace("+", "%20")
+        val cloth = clothService.findClothById(body.clothId1.toLong())
+        val intent = "mailto:${cloth!!.seller!!.email}?subject=$encodedSubject&body=$encodedBody"
 
         return "redirect:$intent"
     }
-
 
 
     @GetMapping("")
@@ -93,7 +106,12 @@ class InventoryController(
         if (form.type == Constants.BUY_IN) {
             inventoryService.buyIn(user = user, productId = form.productId, quantity = form.quantity, date = form.date)
         } else if (form.type == Constants.SELL_OUT) {
-            inventoryService.sellOut(user = user, productId = form.productId, quantity = form.quantity, date = form.date)
+            inventoryService.sellOut(
+                user = user,
+                productId = form.productId,
+                quantity = form.quantity,
+                date = form.date
+            )
         }
         return "redirect:/inventory"
     }

@@ -21,18 +21,48 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="clothes" class="col-sm-2 col-form-label">Tên quần áo</label>
+            <label for="clothes1" class="col-sm-2 col-form-label">Tên quần áo 1</label>
             <div class="col-sm-10">
-                <select class="form-control" id="clothes" th:name="clothId" disabled>
+                <select class="form-control" id="clothes1" th:name="clothId1" disabled>
                     <option value="">Chưa chọn</option>
                     <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
                 </select>
             </div>
         </div>
         <div class="form-group row">
-            <label for="quantity" class="col-sm-2 col-form-label">Số lượng</label>
+            <label for="quantity1" class="col-sm-2 col-form-label">Số lượng</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity" value="0" th:name="quantity" disabled>
+                <input type="number" class="form-control" id="quantity1" value="0" th:name="quantity1" disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="clothes2" class="col-sm-2 col-form-label">Tên quần áo 2</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="clothes2" th:name="clothId2" disabled>
+                    <option value="">Chưa chọn</option>
+                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="quantity2" class="col-sm-2 col-form-label">Số lượng</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="quantity2" value="0" th:name="quantity2" disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="clothes3" class="col-sm-2 col-form-label">Tên quần áo 3</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="clothes3" th:name="clothId3" disabled>
+                    <option value="">Chưa chọn</option>
+                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="quantity3" class="col-sm-2 col-form-label">Số lượng</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="quantity3" value="0" th:name="quantity3" disabled>
             </div>
         </div>
         <a href="#" class="text-danger">Nhấn vào đây để ký điện tử*</a>
@@ -48,11 +78,9 @@
             const supplierId = $('#supplier').val();
             console.log(supplierId)
             if (supplierId === '-1') {
-                $('#clothes').prop('disabled', true);
-                $('#quantity').prop('disabled', true);
+                $('.form-control').prop('disabled', true);
             } else {
-                $('#clothes').prop('disabled', false);
-                $('#quantity').prop('disabled', false);
+                $('.form-control').prop('disabled', false);
             }
         });
     });

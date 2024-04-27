@@ -3,10 +3,10 @@ package dev.vstd.clothes_renting.controller
 import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.controller.form.RequestMoreProductForm
 import dev.vstd.clothes_renting.controller.form.UpdateInventoryForm
+import dev.vstd.clothes_renting.data.entity.OrderEntity
+import dev.vstd.clothes_renting.data.entity.ProductsOfOrderEntity
 import dev.vstd.clothes_renting.data.entity.UserEntity
-import dev.vstd.clothes_renting.data.service.ClothService
-import dev.vstd.clothes_renting.data.service.InventoryService
-import dev.vstd.clothes_renting.data.service.SellerService
+import dev.vstd.clothes_renting.data.service.*
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.net.URLEncoder
+import java.sql.Date
+import java.time.LocalDate
 import java.util.logging.Logger
 
 @Controller
@@ -24,7 +26,9 @@ import java.util.logging.Logger
 class InventoryController(
     private val inventoryService: InventoryService,
     private val clothService: ClothService,
-    private val sellerService: SellerService
+    private val sellerService: SellerService,
+    private val orderService: OrderService,
+    private val pooService: POOService
 ) {
     private val logger = Logger.getLogger(InventoryController::class.qualifiedName)
 
@@ -39,23 +43,65 @@ class InventoryController(
     }
 
     @PostMapping("/request-product")
-    fun postRequestMoreProduct(body: RequestMoreProductForm, redirectAttributes: RedirectAttributes): String {
+    fun postRequestMoreProduct(body: RequestMoreProductForm, redirectAttributes: RedirectAttributes, request: HttpServletRequest): String {
         logger.info("yooooooo")
-        val cloth = clothService.findClothById(body.clothId.toLong())
-        if (cloth?.seller?.id?.toInt() != body.sellerId) {
-            redirectAttributes[Constants.ATTR_ERROR_MSG] = "Lỗi: Người bán không chính xác. Gợi ý: ${cloth!!.seller!!.name}"
-            return "redirect:/inventory/request-product"
-        }
-        // Encode subject and body
         val encodedSubject = URLEncoder.encode("Đặt hàng", "UTF-8").replace("+", "%20")
-        val encodedBody = URLEncoder.encode("Chào bạn, tôi muốn đặt thêm ${body.quantity} sản phẩm ${cloth.name}", "UTF-8").replace("+", "%20")
+        var bodyStr = "Chào bạn, tôi muốn đặt thêm:\n"
+
+        val clothes = mutableListOf<ProductsOfOrderEntity>()
 
         // Construct mailto URI
-        val intent = "mailto:${cloth.seller.email}?subject=$encodedSubject&body=$encodedBody"
+        if (body.clothId1.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId1.toLong())
+            clothes += ProductsOfOrderEntity(
+                clothEntity = cloth!!,
+                quantity = body.quantity1,
+                snapshotPrice = cloth.price
+            )
+            bodyStr += "${body.quantity1} sản phẩm ${cloth!!.name}\n"
+        }
+        if (body.clothId2.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId2.toLong())
+            clothes += ProductsOfOrderEntity(
+                clothEntity = cloth!!,
+                quantity = body.quantity2,
+                snapshotPrice = cloth.price
+            )
+            bodyStr += "${body.quantity2} sản phẩm ${cloth!!.name}\n"
+        }
+        if (body.clothId3.isNotEmpty()) {
+            val cloth = clothService.findClothById(body.clothId3.toLong())
+            clothes += ProductsOfOrderEntity(
+                clothEntity = cloth!!,
+                quantity = body.quantity3,
+                snapshotPrice = cloth.price
+            )
+            bodyStr += "${body.quantity3} sản phẩm ${cloth!!.name}\n"
+        }
 
+//        if (cloth?.seller?.id?.toInt() != body.sellerId) {
+//            redirectAttributes[Constants.ATTR_ERROR_MSG] = "Lỗi: Người bán không chính xác. Gợi ý: ${cloth!!.seller!!.name}"
+//            return "redirect:/inventory/request-product"
+//        }
+        // Encode subject and body
+        val encodedBody = URLEncoder.encode(bodyStr, "UTF-8").replace("+", "%20")
+        val cloth = clothService.findClothById(body.clothId1.toLong())
+        val intent = "mailto:${cloth!!.seller!!.email}?subject=$encodedSubject&body=$encodedBody"
+
+        val order = orderService.createOrder(OrderEntity(
+            user = request.session.getAttribute(Constants.ATTR_USER) as UserEntity,
+            date = Date.valueOf(LocalDate.now()),
+            sellerEntity = cloth.seller!!
+        ))
+        clothes.forEach {
+            pooService.insert(
+                it.apply {
+                    orderEntity = order
+                }
+            )
+        }
         return "redirect:$intent"
     }
-
 
 
     @GetMapping("")
@@ -93,7 +139,12 @@ class InventoryController(
         if (form.type == Constants.BUY_IN) {
             inventoryService.buyIn(user = user, productId = form.productId, quantity = form.quantity, date = form.date)
         } else if (form.type == Constants.SELL_OUT) {
-            inventoryService.sellOut(user = user, productId = form.productId, quantity = form.quantity, date = form.date)
+            inventoryService.sellOut(
+                user = user,
+                productId = form.productId,
+                quantity = form.quantity,
+                date = form.date
+            )
         }
         return "redirect:/inventory"
     }

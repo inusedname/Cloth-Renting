@@ -13,7 +13,7 @@ class ProductsOfOrderEntity(
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    var orderEntity: OrderEntity? = null,
+    var orderEntity: BuyInOrderEntity? = null,
 
     val quantity: Int,
 

@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container my-3">
-    <a th:href="@{|${'../'}|}" class="btn btn-secondary">Quay lại</a>
+    <a class="btn-back btn btn-secondary">Quay lại</a>
     <h2 class="text-center">Tình trạng kho</h2>
 
     <form action="" method="get">
@@ -60,9 +60,6 @@
     <div class="row">
         <div class="col-sm-6">
             <a th:href="@{/inventory/history}" class="btn btn-secondary">Xem lịch sử thay đổi gần đây</a>
-        </div>
-        <div class="col-sm-6 text-right">
-            <a th:href="@{/inventory/update}" class="btn btn-primary">Cập nhật</a>
         </div>
     </div>
 </div>

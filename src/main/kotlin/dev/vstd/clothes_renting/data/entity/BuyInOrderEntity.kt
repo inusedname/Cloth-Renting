@@ -2,10 +2,13 @@ package dev.vstd.clothes_renting.data.entity
 
 import jakarta.persistence.*
 import java.sql.Date
-import java.time.LocalDate
 
+/**
+ * This is different form the order that normal privileged users make,
+ * that this is the order that the shop's admin buy the clothes from the sellers
+ */
 @Entity
-class OrderEntity(
+class BuyInOrderEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @ManyToOne

@@ -7,7 +7,9 @@ import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.repository.InventoryItemRepository
 import dev.vstd.clothes_renting.data.repository.InventoryLogRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.sql.Date
+import java.time.LocalDate
 
 @Service
 class InventoryService(
@@ -29,22 +31,33 @@ class InventoryService(
     fun filterByItemId(id: Long): List<InventoryItemLogEntity> {
         return inventoryLogRepository.findByInventoryItemId(id)
     }
-    fun buyIn(user: UserEntity, productId: Long, quantity: Int, date: String) {
+
+    @Transactional
+    fun buyIn(user: UserEntity, date: LocalDate, productId: Long, quantity: Int) {
+        // update item
         val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
+        inventoryItemEntity.apply {
+            quantityInStock += quantity
+            lastUpdate = Date.valueOf(date)
+        }
+        val savedItem = inventoryItemRepository.save(inventoryItemEntity)
+
+        // Update log
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
             action = Constants.BUY_IN,
             date = Date.valueOf(date),
             user = user,
-            inventoryItem = inventoryItemEntity
+            inventoryItem = savedItem
         )
-        inventoryItemEntity.apply {
-            quantityInStock += quantity
-            lastUpdate = Date.valueOf(date)
-        }
-
         inventoryLogRepository.save(logEntity)
-        inventoryItemRepository.save(inventoryItemEntity)
+    }
+
+    @Transactional
+    fun buyIn(user: UserEntity, date: LocalDate, changes: Map<Long, Int>) {
+        changes.forEach { (productId, quantity) ->
+            buyIn(user, date, productId, quantity)
+        }
     }
 
     fun sellOut(user: UserEntity, productId: Long, quantity: Int, date: String) {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        .card {
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-3">
+    <a class="btn-back btn btn-secondary">Quay lại</a>
+    <h2 class="text-center">Dashboard</h2>
+    <div class="row">
+        <div class="col-md-6" th:each="item : ${records}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: <span th:text="${item.id}"></span></h5>
+                    <p class="card-text">Date: <span th:text="${#dates.format(item.date, 'yyyy-MM-dd HH:mm')}"></span></p>
+                    <p class="card-text">User: <span th:text="${item.user.username}"></span></p>
+                    <p class="card-text">Seller: <span th:text="${item.sellerEntity.name}"></span></p>
+                    <ol>
+                        <li th:each="product : ${item.products}">
+                            <span th:text="${product.clothEntity.name}"></span>
+                            <span th:text="${product.quantity}"></span>
+                        </li>
+                    </ol>
+                    <!-- You can add more details here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/app.js"></script>
+</html>

@@ -1,13 +1,12 @@
 package dev.vstd.clothes_renting.data.service
 
+import dev.vstd.clothes_renting.controller.form.UpdateClothForm
 import dev.vstd.clothes_renting.data.entity.ClothEntity
 import dev.vstd.clothes_renting.data.entity.InventoryItemEntity
 import dev.vstd.clothes_renting.data.repository.ClothRepository
-import dev.vstd.clothes_renting.controller.form.UpdateClothForm
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.sql.Date
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -41,7 +40,7 @@ class ClothService(
 
         if (updateClothForm.id == null) {
             val inventoryItemEntity = InventoryItemEntity(
-                clothEntity = clothEntity, lastUpdate = Date.valueOf(LocalDate.now())
+                clothEntity = clothEntity, lastUpdate = LocalDateTime.now()
             )
             inventoryService.save(inventoryItemEntity)
         }

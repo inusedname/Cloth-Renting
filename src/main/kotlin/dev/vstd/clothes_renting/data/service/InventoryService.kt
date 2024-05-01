@@ -8,8 +8,7 @@ import dev.vstd.clothes_renting.data.repository.InventoryItemRepository
 import dev.vstd.clothes_renting.data.repository.InventoryLogRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.sql.Date
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class InventoryService(
@@ -33,12 +32,12 @@ class InventoryService(
     }
 
     @Transactional
-    fun buyIn(user: UserEntity, date: LocalDate, productId: Long, quantity: Int) {
+    fun buyIn(user: UserEntity, date: LocalDateTime, productId: Long, quantity: Int) {
         // update item
         val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
         inventoryItemEntity.apply {
             quantityInStock += quantity
-            lastUpdate = Date.valueOf(date)
+            lastUpdate = date
         }
         val savedItem = inventoryItemRepository.save(inventoryItemEntity)
 
@@ -46,7 +45,7 @@ class InventoryService(
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
             action = Constants.BUY_IN,
-            date = Date.valueOf(date),
+            date = date,
             user = user,
             inventoryItem = savedItem
         )
@@ -54,7 +53,7 @@ class InventoryService(
     }
 
     @Transactional
-    fun buyIn(user: UserEntity, date: LocalDate, changes: Map<Long, Int>) {
+    fun buyIn(user: UserEntity, date: LocalDateTime, changes: Map<Long, Int>) {
         changes.forEach { (productId, quantity) ->
             buyIn(user, date, productId, quantity)
         }
@@ -65,13 +64,13 @@ class InventoryService(
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
             action = Constants.SELL_OUT,
-            date = Date.valueOf(date),
+            date = LocalDateTime.now(),
             user = user,
             inventoryItem = inventoryItemEntity
         )
         inventoryItemEntity.apply {
             quantityInStock -= quantity
-            lastUpdate = Date.valueOf(date)
+            lastUpdate = LocalDateTime.now()
         }
 
         inventoryLogRepository.save(logEntity)

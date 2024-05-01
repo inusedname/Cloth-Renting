@@ -2,7 +2,6 @@ package dev.vstd.clothes_renting.controller
 
 import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.controller.form.RequestMoreProductForm
-import dev.vstd.clothes_renting.controller.form.UpdateInventoryForm
 import dev.vstd.clothes_renting.data.entity.ProductsOfOrderEntity
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.service.BuyInOrderService
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.logging.Logger
 
 @Controller
@@ -73,7 +72,7 @@ class InventoryController(
 
         buyInOrderService.buyIn(
             user = request.session.getAttribute(Constants.ATTR_USER) as UserEntity,
-            date = LocalDate.now(),
+            date = LocalDateTime.now(),
             clothes = clothes,
             sellerEntity = sellerService.getSellerById(body.sellerId)!!
         )

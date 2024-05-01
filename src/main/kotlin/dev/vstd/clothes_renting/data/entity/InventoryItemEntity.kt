@@ -1,8 +1,7 @@
 package dev.vstd.clothes_renting.data.entity
 
 import jakarta.persistence.*
-import java.sql.Date
-import java.sql.Timestamp
+import java.time.LocalDateTime
 
 @Entity
 class InventoryItemEntity(
@@ -12,5 +11,5 @@ class InventoryItemEntity(
     @OneToOne
     @JoinColumn(name = "cloth_id")
     val clothEntity: ClothEntity,
-    var lastUpdate: Date
+    var lastUpdate: LocalDateTime
 )

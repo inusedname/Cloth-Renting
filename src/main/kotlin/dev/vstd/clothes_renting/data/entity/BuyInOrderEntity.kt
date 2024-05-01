@@ -1,7 +1,7 @@
 package dev.vstd.clothes_renting.data.entity
 
 import jakarta.persistence.*
-import java.sql.Date
+import java.time.LocalDateTime
 
 /**
  * This is different form the order that normal privileged users make,
@@ -15,7 +15,7 @@ class BuyInOrderEntity(
     @JoinColumn(name = "user_id")
     val user: UserEntity,
 
-    val date: Date,
+    val date: LocalDateTime,
 
     @OneToMany(mappedBy = "orderEntity")
     val products: List<ProductsOfOrderEntity>? = null,

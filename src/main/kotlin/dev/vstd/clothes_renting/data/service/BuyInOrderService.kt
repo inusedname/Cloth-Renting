@@ -1,16 +1,13 @@
 package dev.vstd.clothes_renting.data.service
 
-import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.data.entity.BuyInOrderEntity
 import dev.vstd.clothes_renting.data.entity.ProductsOfOrderEntity
 import dev.vstd.clothes_renting.data.entity.SellerEntity
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.repository.BuyInOrderRepository
 import dev.vstd.clothes_renting.data.repository.ProductsOfOrderRepository
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.stereotype.Service
-import java.sql.Date
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class BuyInOrderService(
@@ -29,13 +26,13 @@ class BuyInOrderService(
     fun buyIn(
         user: UserEntity,
         sellerEntity: SellerEntity,
-        date: LocalDate,
+        date: LocalDateTime,
         clothes: List<ProductsOfOrderEntity>
     ): BuyInOrderEntity {
         // Create order
         val tmpEntity = BuyInOrderEntity(
             user = user,
-            date = Date.valueOf(date),
+            date = date,
             sellerEntity = sellerEntity,
         )
         val savedEntity = buyInOrderRepository.save(tmpEntity)

@@ -36,7 +36,7 @@
         <tr th:each="record : ${records}">
             <td th:text="${record.clothEntity.name}"></td>
             <td th:text="${record.quantityInStock}"></td>
-            <td th:text="${record.lastUpdate.toLocaleString()}"></td>
+            <td th:text="${record.lastUpdate.toString()}"></td>
             <td th:text="${record.clothEntity.seller.name}"></td>
             <td><a th:href="@{'/inventory/history?id=' + ${record.clothEntity.id}}">Xem lịch sử</a></td>
         </tr>

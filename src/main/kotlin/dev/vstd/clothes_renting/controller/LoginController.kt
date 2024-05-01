@@ -3,7 +3,7 @@ package dev.vstd.clothes_renting.controller
 import dev.vstd.clothes_renting.Constants
 import dev.vstd.clothes_renting.controller.form.LoginForm
 import dev.vstd.clothes_renting.data.entity.UserEntity
-import dev.vstd.clothes_renting.data.service.AuthService
+import dev.vstd.clothes_renting.data.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import java.util.logging.Logger
 
 @Controller
-class LoginController(private val authService: AuthService) {
+class LoginController(private val userService: UserService) {
     private val logger = Logger.getLogger(this::class.qualifiedName)
 
     @GetMapping("/login")
@@ -25,8 +25,8 @@ class LoginController(private val authService: AuthService) {
 
     @PostMapping("/login")
     fun postLogin(loginForm: LoginForm, request: HttpServletRequest): String {
-        return if (authService.login(loginForm.email, loginForm.password)) {
-            request.session.setAttribute(Constants.ATTR_USER, authService.findUserByEmail(loginForm.email))
+        return if (userService.login(loginForm.email, loginForm.password)) {
+            request.session.setAttribute(Constants.ATTR_USER, userService.findUserByEmail(loginForm.email))
             "redirect:/"
         } else {
             "redirect:/login"

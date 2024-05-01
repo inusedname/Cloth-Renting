@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService {
-    @Autowired
-    private lateinit var userRepository: UserRepository
+class UserService(private val userRepository: UserRepository) {
 
     fun login(email: String, password: String): Boolean {
         return userRepository.existsByEmailAndPassword(email, password)

@@ -1,8 +1,6 @@
 package dev.vstd.clothes_renting.data.service
 
 import dev.vstd.clothes_renting.Constants
-import dev.vstd.clothes_renting.data.repository.InventoryLogRepository
-import dev.vstd.clothes_renting.data.repository.SellerRepository
 import jakarta.persistence.EntityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -13,8 +11,8 @@ import java.time.LocalTime
 
 @Service
 class ReportService(
-    private val inventoryLogRepo: InventoryLogRepository,
-    private val sellerRepo: SellerRepository,
+    private val inventoryService: InventoryService,
+    private val sellerService: SellerService,
 ) {
     @Autowired
     lateinit var entityManager: EntityManager
@@ -34,10 +32,10 @@ class ReportService(
     )
 
     fun getSellerConsumingRatings(limit: Int, month: LocalDate): List<SellerConsumingRating> {
-        val rated = sellerRepo.findAllOrderByClothesInventoryItemQuantityInStockAsc().reversed().take(limit)
+        val rated = sellerService.findAllOrderByClothesInventoryItemQuantityInStockAsc().reversed().take(limit)
         return rated.map { seller ->
             val buyIn = seller.clothes.sumOf { cloth ->
-                val logs = inventoryLogRepo.findByInventoryItemIdAndDateIsBetween(
+                val logs = inventoryService.findByInventoryItemIdAndDateIsBetween(
                     cloth.id,
                     LocalDateTime.of(month, LocalTime.of(0, 0)).withDayOfMonth(1),
                     LocalDateTime.of(month, LocalTime.of(0, 0)).withDayOfMonth(month.lengthOfMonth())

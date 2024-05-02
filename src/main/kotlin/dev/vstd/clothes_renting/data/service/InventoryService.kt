@@ -30,6 +30,9 @@ class InventoryService(
     fun filterByItemId(id: Long): List<InventoryItemLogEntity> {
         return inventoryLogRepository.findByInventoryItemId(id)
     }
+    fun findByInventoryItemIdAndDateIsBetween(id: Long, start: LocalDateTime, end: LocalDateTime): List<InventoryItemLogEntity> {
+        return inventoryLogRepository.findByInventoryItemIdAndDateIsBetween(id, start, end)
+    }
 
     @Transactional
     fun buyIn(user: UserEntity, date: LocalDateTime, productId: Long, quantity: Int) {

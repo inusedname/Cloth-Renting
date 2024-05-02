@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.time.LocalDateTime
 import java.util.logging.Logger
 
@@ -31,17 +30,23 @@ class InventoryController(
     private val logger = Logger.getLogger(InventoryController::class.qualifiedName)
 
     @GetMapping("/request-product")
-    fun getRequestMoreProduct(model: Model, @RequestParam(required = false) errorMessage: String?): String {
+    fun getRequestMoreProduct(
+        model: Model,
+        @RequestParam(required = false) errorMessage: String?,
+        @RequestParam(required = false) sellerId: Long?
+    ): String {
         model[Constants.ATTR_SELLERS] = sellerService.getSellers()
-        model[Constants.ATTR_PRODUCTS] = clothService.getAllClothes()
         if (errorMessage != null) {
             model[Constants.ATTR_ERROR_MSG] = errorMessage
         }
-        return "make_order_manager"
+        if (sellerId != null) {
+            model[Constants.ATTR_PRODUCTS] = clothService.getAllClothes().filter { it.seller!!.id == sellerId }
+        }
+        return "request_product"
     }
 
     @PostMapping("/request-product")
-    fun postRequestMoreProduct(body: RequestMoreProductForm, redirectAttributes: RedirectAttributes, request: HttpServletRequest): String {
+    fun postRequestMoreProduct(body: RequestMoreProductForm, request: HttpServletRequest): String {
         val clothes = mutableListOf<ProductsOfOrderEntity>()
 
         // Construct mailto URI
@@ -76,7 +81,7 @@ class InventoryController(
             clothes = clothes,
             sellerEntity = sellerService.getSellerById(body.sellerId)!!
         )
-        return "404"
+        return "redirect:/order"
     }
 
 

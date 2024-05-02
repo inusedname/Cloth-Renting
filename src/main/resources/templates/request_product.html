@@ -9,21 +9,28 @@
 <div class="container my-3">
     <a th:href="@{|${'../'}|}" class="btn btn-secondary">Quay lại</a>
     <h1 class="text-center">Nhập hàng</h1>
-    <form action="request-product" method="post">
+    <form action="request-product" method="get">
         <div class="form-group row">
             <label for="supplier" class="col-sm-2 col-form-label">Nhà cung cấp</label>
-            <div class="col-sm-10">
+            <div class="col-sm-9">
                 <select class="form-control" id="supplier" th:name="sellerId">
                     <option value="-1">Chưa chọn</option>
-                    <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.name}"></option>
+                    <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.name}"
+                            th:selected="${#strings.equals(seller.id, param['sellerId'])}"></option>
                 </select>
                 <span th:if="${errorMessage != null}" th:text="${errorMessage}" class="error text-danger"></span>
             </div>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary">Find</button>
+            </div>
         </div>
+    </form>
+    <form action="request-product" method="post">
+        <input th:name="sellerId" th:value="${param['sellerId']}" type="hidden" name="sellerId">
         <div class="form-group row">
             <label for="clothes1" class="col-sm-2 col-form-label">Tên quần áo 1</label>
             <div class="col-sm-10">
-                <select class="form-control" id="clothes1" th:name="clothId1" disabled>
+                <select class="form-control" id="clothes1" th:name="clothId1">
                     <option value="">Chưa chọn</option>
                     <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
                 </select>
@@ -32,13 +39,13 @@
         <div class="form-group row">
             <label for="quantity1" class="col-sm-2 col-form-label">Số lượng</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity1" value="0" th:name="quantity1" disabled>
+                <input type="number" class="form-control" id="quantity1" value="0" th:name="quantity1">
             </div>
         </div>
         <div class="form-group row">
             <label for="clothes2" class="col-sm-2 col-form-label">Tên quần áo 2</label>
             <div class="col-sm-10">
-                <select class="form-control" id="clothes2" th:name="clothId2" disabled>
+                <select class="form-control" id="clothes2" th:name="clothId2">
                     <option value="">Chưa chọn</option>
                     <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
                 </select>
@@ -47,13 +54,13 @@
         <div class="form-group row">
             <label for="quantity2" class="col-sm-2 col-form-label">Số lượng</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity2" value="0" th:name="quantity2" disabled>
+                <input type="number" class="form-control" id="quantity2" value="0" th:name="quantity2">
             </div>
         </div>
         <div class="form-group row">
             <label for="clothes3" class="col-sm-2 col-form-label">Tên quần áo 3</label>
             <div class="col-sm-10">
-                <select class="form-control" id="clothes3" th:name="clothId3" disabled>
+                <select class="form-control" id="clothes3" th:name="clothId3">
                     <option value="">Chưa chọn</option>
                     <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
                 </select>
@@ -62,7 +69,7 @@
         <div class="form-group row">
             <label for="quantity3" class="col-sm-2 col-form-label">Số lượng</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity3" value="0" th:name="quantity3" disabled>
+                <input type="number" class="form-control" id="quantity3" value="0" th:name="quantity3">
             </div>
         </div>
         <a href="#" class="text-danger">Nhấn vào đây để ký điện tử*</a>
@@ -70,21 +77,6 @@
         <button type="submit" class="float-right btn btn-primary">Gửi yêu cầu nhập hàng</button>
     </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(() => {
-        $('#supplier').change(() => {
-            const supplierId = $('#supplier').val();
-            console.log(supplierId)
-            if (supplierId === '-1') {
-                $('.form-control').prop('disabled', true);
-            } else {
-                $('.form-control').prop('disabled', false);
-            }
-        });
-    });
-</script>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

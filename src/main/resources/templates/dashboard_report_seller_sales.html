@@ -11,7 +11,7 @@
     <div class="row mt-3">
         <div class="col-md-12 text-center">
             <h3>Tạo báo cáo</h3>
-            <p>Báo cáo: Thống kê nhà cung cấp theo lượng hàng nhập</p>
+            <p>Báo cáo: Thống kê đối tác theo doanh thu</p>
         </div>
     </div>
     <div>
@@ -40,16 +40,16 @@
                 <tr>
                     <th>Xếp hạng</th>
                     <th>Tên nhà cung cấp</th>
-                    <th>Số lượng hàng nhập</th>
-                    <th>Số lượng hàng đang tồn kho</th>
+                    <th>Số đơn hàng đã bán được</th>
+                    <th>Tổng doanh thu</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="sellerRating, iterStat : ${sellerRatings}">
                     <td th:text="${'#' + iterStat.count}"></td>
                     <td th:text="${sellerRating.name}"></td>
-                    <td th:text="${sellerRating.buyIn}"></td>
-                    <td th:text="${sellerRating.onInventory}"></td>
+                    <td th:text="${sellerRating.totalOrders}"></td>
+                    <td th:text="${sellerRating.totalSales}"></td>
                 </tr>
                 </tbody>
             </table>

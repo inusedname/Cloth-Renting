@@ -62,18 +62,18 @@ class InventoryService(
         }
     }
 
-    fun sellOut(user: UserEntity, productId: Long, quantity: Int, date: String) {
+    fun sellOut(user: UserEntity, date: LocalDateTime, productId: Long, quantity: Int) {
         val inventoryItemEntity = inventoryItemRepository.findByClothEntityId(productId)
         val logEntity = InventoryItemLogEntity(
             quantity = quantity,
             action = Constants.SELL_OUT,
-            date = LocalDateTime.now(),
+            date = date,
             user = user,
             inventoryItem = inventoryItemEntity
         )
         inventoryItemEntity.apply {
             quantityInStock -= quantity
-            lastUpdate = LocalDateTime.now()
+            lastUpdate = date
         }
 
         inventoryLogRepository.save(logEntity)

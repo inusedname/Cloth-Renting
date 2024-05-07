@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm/Sửa Trang Phục</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <h2>Thêm sản phảm mới</h2>
+    <form method="post">
+        <label th:text="|Tên đối tác (shop): ${sellerName}|"></label>
+        <div id="productFieldTemplate">
+            <div class="form-group row">
+                <label for="clothesX" class="col-sm-2 col-form-label">Tên quần áo</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="clothesX" name="clothId" th:value="${clothItem != null ? clothItem.name : ''}">
+                        <option value="">Chưa chọn</option>
+                        <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="quantity" class="col-sm-2 col-form-label">Số lượng</label>
+                <div class="col-sm-10">
+                    <input type="number" th:value="${quantity != null ? quantity : '1'}" class="form-control" id="quantity" value="0" name="quantity">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>

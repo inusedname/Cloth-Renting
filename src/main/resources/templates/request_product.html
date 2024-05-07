@@ -27,54 +27,26 @@
     </form>
     <form action="request-product" method="post">
         <input th:name="sellerId" th:value="${param['sellerId']}" type="hidden" name="sellerId">
-        <div class="form-group row">
-            <label for="clothes1" class="col-sm-2 col-form-label">Tên quần áo 1</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="clothes1" th:name="clothId1">
-                    <option value="">Chưa chọn</option>
-                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="quantity1" class="col-sm-2 col-form-label">Số lượng</label>
-            <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity1" value="0" th:name="quantity1">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="clothes2" class="col-sm-2 col-form-label">Tên quần áo 2</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="clothes2" th:name="clothId2">
-                    <option value="">Chưa chọn</option>
-                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="quantity2" class="col-sm-2 col-form-label">Số lượng</label>
-            <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity2" value="0" th:name="quantity2">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="clothes3" class="col-sm-2 col-form-label">Tên quần áo 3</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="clothes3" th:name="clothId3">
-                    <option value="">Chưa chọn</option>
-                    <option th:each="cloth : ${products}" th:value="${cloth.id}" th:text="${cloth.name}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="quantity3" class="col-sm-2 col-form-label">Số lượng</label>
-            <div class="col-sm-10">
-                <input type="number" class="form-control" id="quantity3" value="0" th:name="quantity3">
-            </div>
-        </div>
-        <a href="#" class="text-danger">Nhấn vào đây để ký điện tử*</a>
+        <table class="table table-bordered col-11 justify-content-center">
+            <tr>
+                <th>Tên món hàng</th>
+                <th>Số lượng</th>
+            </tr>
+            <tr th:each="entry, start: ${cart}">
+                <td th:text="${entry.first}"></td>
+                <td th:text="${entry.second}"></td>
+            </tr>
+            <tr th:if="${cart == null}">
+                <td colspan="2" class="text-center">Chưa có sản phẩm nào</td>
+            </tr>
+        </table>
+        <a class="btn btn-success row"
+           id="addMoreProductButton"
+           th:disabled="${param['sellerId'] == null}"
+           th:href="@{/inventory/request-product-more}">Thêm 1 sản phẩm</a>
+        <a href="#" class="text-danger row">Nhấn vào đây để ký điện tử*</a>
         <br>
-        <button type="submit" class="float-right btn btn-primary">Gửi yêu cầu nhập hàng</button>
+        <button type="submit" class="float-right btn btn-primary" th:disabled="${param['sellerId'] == null}">Gửi yêu cầu nhập hàng</button>
     </form>
 </div>
 </body>

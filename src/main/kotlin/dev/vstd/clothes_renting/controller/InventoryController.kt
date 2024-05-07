@@ -1,7 +1,6 @@
 package dev.vstd.clothes_renting.controller
 
 import dev.vstd.clothes_renting.Constants
-import dev.vstd.clothes_renting.controller.form.RequestMoreProductForm
 import dev.vstd.clothes_renting.data.entity.ProductsOfOrderEntity
 import dev.vstd.clothes_renting.data.entity.UserEntity
 import dev.vstd.clothes_renting.data.service.BuyInOrderService
@@ -33,53 +32,87 @@ class InventoryController(
     fun getRequestMoreProduct(
         model: Model,
         @RequestParam(required = false) errorMessage: String?,
-        @RequestParam(required = false) sellerId: Long?
+        @RequestParam(required = false) sellerId: Long?,
+        request: HttpServletRequest
     ): String {
         model[Constants.ATTR_SELLERS] = sellerService.getSellers()
         if (errorMessage != null) {
             model[Constants.ATTR_ERROR_MSG] = errorMessage
         }
         if (sellerId != null) {
-            model[Constants.ATTR_PRODUCTS] = clothService.getAllClothes().filter { it.seller!!.id == sellerId }
+            if (request.session.getAttribute("sellerId") != sellerId) {
+                resetCart(request)
+            }
+            request.session.setAttribute("sellerId", sellerId)
+            val cart = request.session.getAttribute("cart") as MutableMap<Long, Int>
+            val displayCart = cart.map {
+                val cloth = clothService.findClothById(it.key)!!
+                cloth.name to it.value
+            }
+            model["cart"] = displayCart
         }
         return "request_product"
     }
 
-    @PostMapping("/request-product")
-    fun postRequestMoreProduct(body: RequestMoreProductForm, request: HttpServletRequest): String {
-        val clothes = mutableListOf<ProductsOfOrderEntity>()
+    private fun resetCart(request: HttpServletRequest) {
+        request.session.setAttribute("cart", mutableMapOf<Long, Int>())
+    }
 
-        // Construct mailto URI
-        if (body.clothId1.isNotEmpty()) {
-            val cloth = clothService.findClothById(body.clothId1.toLong())
-            clothes += ProductsOfOrderEntity(
-                clothEntity = cloth!!,
-                quantity = body.quantity1,
-                snapshotPrice = cloth.price
-            )
+    @GetMapping("/request-product-more")
+    fun getRequestProductMore(
+        model: Model,
+        @RequestParam(required = false) editableClothId: Long?,
+        request: HttpServletRequest
+    ): String {
+        val sellerId = request.session.getAttribute("sellerId") as Long
+        if (editableClothId != null) {
+            val clothEntity = clothService.findClothById(editableClothId)!!
+            model[Constants.ATTR_CLOTH_ITEM] = clothEntity
+            val cart = request.session.getAttribute("cart") as MutableMap<Long, Int>
+            model["quantity"] = cart[editableClothId] ?: 0
         }
-        if (body.clothId2.isNotEmpty()) {
-            val cloth = clothService.findClothById(body.clothId2.toLong())
-            clothes += ProductsOfOrderEntity(
-                clothEntity = cloth!!,
-                quantity = body.quantity2,
-                snapshotPrice = cloth.price
-            )
-        }
-        if (body.clothId3.isNotEmpty()) {
-            val cloth = clothService.findClothById(body.clothId3.toLong())
-            clothes += ProductsOfOrderEntity(
-                clothEntity = cloth!!,
-                quantity = body.quantity3,
-                snapshotPrice = cloth.price
-            )
+        val seller = sellerService.getSellerById(sellerId)!!
+        val clothes = seller.clothes
+        model["sellerName"] = seller.name
+        model["products"] = clothes
+        return "request_product_more"
+    }
+
+    @PostMapping("/request-product-more")
+    fun postRequestProductMore(
+        @RequestParam clothId: Long,
+        @RequestParam quantity: Int,
+        request: HttpServletRequest
+    ): String {
+        val cart = request.session.getAttribute("cart") as MutableMap<Long, Int>
+        cart[clothId] = (cart[clothId] ?: 0) + quantity
+        request.session.setAttribute("cart", cart)
+        val sellerId = request.session.getAttribute("sellerId") as Long
+        return "redirect:/inventory/request-product?sellerId=$sellerId"
+    }
+
+    @PostMapping("/request-product")
+    fun postRequestMoreProduct(@RequestParam body: Map<String, String>, request: HttpServletRequest): String {
+        val clothes = mutableListOf<ProductsOfOrderEntity>()
+        val cart = request.session.getAttribute("cart") as MutableMap<Long, Int>
+        for ((clothId, quantity) in cart) {
+            val clothEntity = clothService.findClothById(clothId)!!
+            if (quantity > 0) {
+                clothes.add(
+                    ProductsOfOrderEntity(
+                        clothEntity = clothEntity,
+                        quantity = quantity,
+                        snapshotPrice = clothEntity.price
+                    )
+                )
+            }
         }
 
         buyInOrderService.buyIn(
             user = request.session.getAttribute(Constants.ATTR_USER) as UserEntity,
             date = LocalDateTime.now(),
             clothes = clothes,
-            sellerEntity = sellerService.getSellerById(body.sellerId)!!
+            sellerEntity = sellerService.getSellerById(body["sellerId"]!!.toLong())!!
         )
         return "redirect:/order"
     }

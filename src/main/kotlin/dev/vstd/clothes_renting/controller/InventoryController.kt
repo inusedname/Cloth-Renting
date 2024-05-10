@@ -29,7 +29,7 @@ class InventoryController(
     private val logger = Logger.getLogger(InventoryController::class.qualifiedName)
 
     @GetMapping("/request-product")
-    fun getRequestMoreProduct(
+    fun getRequestProductTable(
         model: Model,
         @RequestParam(required = false) errorMessage: String?,
         @RequestParam(required = false) sellerId: Long?,
@@ -59,7 +59,7 @@ class InventoryController(
     }
 
     @GetMapping("/request-product-more")
-    fun getRequestProductMore(
+    fun getRequestProductChoose(
         model: Model,
         @RequestParam(required = false) editableClothId: Long?,
         request: HttpServletRequest
@@ -79,7 +79,7 @@ class InventoryController(
     }
 
     @PostMapping("/request-product-more")
-    fun postRequestProductMore(
+    fun postRequestProductChoose(
         @RequestParam clothId: Long,
         @RequestParam quantity: Int,
         request: HttpServletRequest
@@ -92,7 +92,7 @@ class InventoryController(
     }
 
     @PostMapping("/request-product")
-    fun postRequestMoreProduct(@RequestParam body: Map<String, String>, request: HttpServletRequest): String {
+    fun postRequestProductTable(@RequestParam body: Map<String, String>, request: HttpServletRequest): String {
         val clothes = mutableListOf<ProductsOfOrderEntity>()
         val cart = request.session.getAttribute("cart") as MutableMap<Long, Int>
         for ((clothId, quantity) in cart) {

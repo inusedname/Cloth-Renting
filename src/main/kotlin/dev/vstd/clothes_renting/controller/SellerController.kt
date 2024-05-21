@@ -6,7 +6,10 @@ import dev.vstd.clothes_renting.data.service.SellerService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/seller")
@@ -14,8 +17,7 @@ class SellerController(private val sellerService: SellerService) {
 
     @GetMapping("")
     fun dashboard(model: Model): String {
-        val sellers = sellerService.getSellers()
-        model[Constants.ATTR_SELLERS] = sellers
+        model[Constants.ATTR_SELLERS] = sellerService.getSellers()
         return "dashboard_sellers"
     }
 

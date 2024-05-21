@@ -9,10 +9,10 @@
 <div class="container my-3">
     <a th:href="@{|${'../'}|}" class="btn btn-secondary">Quay lại</a>
     <h2 class="text-center">Nhập hàng</h2>
-    <form action="request-product" method="get">
+    <form action="request-product" method="get" class="mt-4">
         <div class="form-group row">
-            <label for="supplier" class="col-sm-2 col-form-label">Nhà cung cấp</label>
-            <div class="col-sm-9">
+            <label for="supplier" class="col-sm-2 col-form-label">Chọn nhà cung cấp: </label>
+            <div class="col-sm-4">
                 <select class="form-control" id="supplier" th:name="sellerId">
                     <option value="-1">Chưa chọn</option>
                     <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.name}"
@@ -21,13 +21,13 @@
                 <span th:if="${errorMessage != null}" th:text="${errorMessage}" class="error text-danger"></span>
             </div>
             <div class="col-sm-1">
-                <button type="submit" class="btn btn-primary">Find</button>
+                <button type="submit" class="btn btn-primary">Chọn</button>
             </div>
         </div>
     </form>
-    <form action="request-product" method="post">
+    <form action="request-product" method="post" class="mt-8">
         <input th:name="sellerId" th:value="${param['sellerId']}" type="hidden" name="sellerId">
-        <table class="table table-bordered col-11 justify-content-center">
+        <table class="table table-bordered col-12 justify-content-center">
             <tr>
                 <th>Tên món hàng</th>
                 <th>Số lượng</th>
@@ -42,9 +42,9 @@
         </table>
         <a class="btn btn-success row"
            id="addMoreProductButton"
-           th:disabled="${param['sellerId'] == null}"
+           th:if="${param['sellerId'] != null}"
            th:href="@{/inventory/request-product-more}">Thêm 1 sản phẩm</a>
-        <a href="#" class="text-danger row">Nhấn vào đây để ký điện tử*</a>
+        <a href="#" th:if="${param['sellerId'] != null}" class="text-danger row">Nhấn vào đây để ký điện tử *</a>
         <br>
         <button type="submit" class="float-right btn btn-primary" th:disabled="${param['sellerId'] == null}">Gửi yêu cầu nhập hàng</button>
     </form>

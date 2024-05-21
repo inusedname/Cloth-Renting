@@ -5,7 +5,7 @@ const form = document.getElementById('loginForm');
 document.getElementById('loginAsUser').addEventListener('click', function(event) {
     // Simulate form submission with user credentials
     form.querySelector('[name="email"]').value = 'user@gmail.com';
-    form.querySelector('[name="password"]').value = 'user';
+    form.querySelector('[name="password"]').value = '12345678';
     form.submit(); // Trigger form submission
 });
 
@@ -13,6 +13,6 @@ document.getElementById('loginAsUser').addEventListener('click', function(event)
 document.getElementById('loginAsAdmin').addEventListener('click', function(event) {
     // Simulate form submission with admin credentials
     form.querySelector('[name="email"]').value = 'admin@gmail.com';
-    form.querySelector('[name="password"]').value = 'admin';
+    form.querySelector('[name="password"]').value = '12345678';
     form.submit(); // Trigger form submission
 });

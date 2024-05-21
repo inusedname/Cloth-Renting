@@ -9,51 +9,56 @@
 <div class="container my-3">
     <a class="btn btn-secondary btn-back">Quay lại</a>
     <h2 class="text-center">Thêm/Sửa Trang Phục</h2>
-    <form method="post" th:action="${'/cloth/save'}">
-        <div class="form-group row" th:if="${clothItem != null}">
-            <label for="id" class="col-sm-2 col-form-label">ID</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="id" id="id" th:value="${clothItem.id}" readonly>
-            </div>
+    <form method="post" th:action="${'/cloth/save'}" th:object="${cloth}">
+        <div class="form-group row" th:if="${cloth.id != null}">
+            <input type="hidden" readonly th:field="*{id}">
         </div>
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Tên</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" id="name" th:value="${clothItem != null ? clothItem.name : ''}">
+                <input type="text" class="form-control" id="name" th:field="*{name}">
+                <p th:if="${#fields.hasErrors('name')}" th:class="text-danger" th:errors="*{name}"></p>
             </div>
         </div>
         <div class="form-group row">
             <label for="seller" class="col-sm-2 col-form-label">Người bán</label>
             <div class="col-sm-10">
-                <select class="form-control" id="seller" th:name="sellerId">
+                <select class="form-control" id="seller" th:field="*{sellerId}">
                     <option th:each="seller: ${sellers}"
                     th:value="${{seller.id}}"
                     th:text="${seller.name}">
                     </option>
                 </select>
+                <p th:if="${#fields.hasErrors('sellerId')}" th:class="text-danger" th:errors="*{sellerId}"></p>
             </div>
         </div>
         <div class="form-group row">
             <label for="image" class="col-sm-2 col-form-label">Hình ảnh</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="previewImage" id="image" th:value="${clothItem != null ? clothItem.previewImage : ''}">
+                <input type="text" class="form-control" id="image" th:field="*{previewImage}">
+                <p th:if="${#fields.hasErrors('previewImage')}" th:class="text-danger" th:errors="*{previewImage}"></p>
             </div>
         </div>
         <div class="form-group row">
             <label for="price" class="col-sm-2 col-form-label">Giá tiền</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" name="price" id="price" th:value="${clothItem != null ? clothItem.price : ''}">
+                <input type="number" class="form-control" id="price" th:field="*{price}">
+                <p th:if="${#fields.hasErrors('price')}" th:class="text-danger" th:errors="*{price}"></p>
             </div>
         </div>
         <div class="form-group row">
             <label for="description" class="col-sm-2 col-form-label">Mô tả</label>
             <div class="col-sm-10">
-                <textarea class="form-control" id="description" rows="3" name="description"
-                          placeholder="nhập mô tả sản phẩm: xuất xứ, cỡ size, hướng dẫn sử dụng"
-                          th:text="${clothItem != null ? clothItem.description : ''}"></textarea>
+                <textarea class="form-control" id="description" rows="3"
+                          th:field="*{description}"
+                          placeholder="Nhập mô tả sản phẩm: xuất xứ, cỡ size, hướng dẫn sử dụng"
+                          th:text="*{description}">
+                </textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:class="text-danger" th:errors="*{description}"></p>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Thêm sản phẩm mới</button>
+        <button type="submit" class="btn btn-primary"
+                th:text="${cloth.id != null ? 'Sửa trang phục' : 'Thêm trang phục mới'}"></button>
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>

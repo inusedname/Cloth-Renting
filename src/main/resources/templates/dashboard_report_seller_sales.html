@@ -4,36 +4,48 @@
     <meta charset="UTF-8">
     <title>Tạo báo cáo</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<style>
+    @media print {
+        .hide-print {
+            display: none !important;
+        }
+    }
+
+    th {
+        background-color: cadetblue;
+        color: white;
+    }
+</style>
 <body>
 <div class="container my-3">
-    <a class="btn btn-secondary btn-back">Quay lại</a>
+    <a class="btn btn-secondary btn-back hide-print">Quay lại</a>
     <div class="row mt-3">
         <div class="col-md-12 text-center">
-            <h3>Tạo báo cáo</h3>
-            <p>Báo cáo: Thống kê đối tác theo doanh thu</p>
+            <h3>Báo cáo: Thống kê đối tác theo doanh thu</h3>
         </div>
     </div>
-    <div>
+    <div class="mt-5">
         <form class="row mt-3 form-horizontal">
             <div class="col-md-3">
-                <label for="month-input">Chọn tháng:</label>
+                <label for="month-input" class="hide-print">Chọn tháng:</label>
                 <input type="month" class="form-control" name="date" id="month-input" th:value="${param['date']}">
             </div>
             <div class="col-md-3">
-                <label for="limit">Chọn số lượng:</label>
+                <label for="limit" class="hide-print">Chọn số lượng:</label>
                 <select name="limit" class="form-control" id="limit">
                     <option value="5" th:selected="${#strings.equals(param['limit'], '5')}">Top 5</option>
                     <option value="10" th:selected="${#strings.equals(param['limit'], '10')}">Top 10</option>
                     <option value="15" th:selected="${#strings.equals(param['limit'], '15')}">Top 15</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary mt-4">Lọc</button>
+            <div class="col-md-3 hide-print mt-auto">
+                <button type="submit" class="btn btn-primary ">Lọc</button>
             </div>
         </form>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-5">
         <div class="col-md-12">
             <table class="table table-bordered">
                 <thead>
@@ -55,7 +67,15 @@
             </table>
         </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-4 text-center">
+            <canvas id="chartOrders"></canvas>
+        </div>
+        <div class="col-md-4 text-center">
+            <canvas id="chartSales"></canvas>
+        </div>
+    </div>
+    <div class="row mt-3 hide-print">
         <div class="col-md-12 text-center">
             <button type="button" class="btn btn-success">Xuất dưới dạng Excel</button>
             <button id="btn-print-pdf" type="button" class="btn btn-danger">Xuất dưới dạng PDF</button>
@@ -65,7 +85,9 @@
 <script src="/app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<script>
+<script th:inline="javascript">
+    /////////////////////
+    // Init first month
     const monthInput = document.getElementById('month-input');
     if (!monthInput.value) {
         monthInput.value = new Date().toISOString().substring(0, 7);
@@ -75,9 +97,74 @@
         console.log('print pdf')
         window.print();
     });
+
+    /////////////////////
+    // init chartOrders
+    const ctx = document.getElementById('chartOrders');
+    const data = {
+        labels: [],
+        datasets: [
+            {
+                label: 'Bán được',
+                data: []
+            }
+        ]
+    }
+    const sellerRatings = /*[[${sellerRatings}]]*/ [];
+    sellerRatings.forEach(sellerRating => {
+        data.labels.push(sellerRating.name);
+        data.datasets[0].data.push(sellerRating.totalOrders);
+    });
+    new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '# đơn hàng đã bán của theo nhà cung cấp, tháng ' + monthInput.value
+                }
+            }
+        },
+    });
+
+    ////////////////
+    // init chartSales
+    const ctxSales = document.getElementById('chartSales');
+    const dataSales = {
+        labels: [],
+        datasets: [
+            {
+                label: 'Doanh thu',
+                data: []
+            }
+        ]
+    }
+    sellerRatings.forEach(sellerRating => {
+        dataSales.labels.push(sellerRating.name);
+        dataSales.datasets[0].data.push(sellerRating.totalSales);
+    });
+    new Chart(ctxSales, {
+        type: 'pie',
+        data: dataSales,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Doanh thu của theo nhà cung cấp, tháng ' + monthInput.value
+                }
+            }
+        },
+    });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>

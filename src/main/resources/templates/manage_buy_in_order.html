@@ -16,7 +16,7 @@
 <body>
 <div class="container my-3">
     <a class="btn-back btn btn-secondary">Quay lại</a>
-    <h2 class="text-center">Dashboard</h2>
+    <h2 class="text-center">Đơn hàng</h2>
     <div class="row">
         <div class="col-md-6" th:each="item : ${records}">
             <div class="card">
@@ -25,12 +25,19 @@
                     <p class="card-text">Date: <span th:text="${item.date.toString()}"></span></p>
                     <p class="card-text">User: <span th:text="${item.user.username}"></span></p>
                     <p class="card-text">Seller: <span th:text="${item.sellerEntity.name}"></span></p>
-                    <ol>
-                        <li th:each="product : ${item.products}">
-                            <span th:text="${product.clothEntity.name}"></span>
-                            <span th:text="${product.quantity}"></span>
-                        </li>
-                    </ol>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                        </tr>
+                        <tr th:each="product : ${item.products}">
+                            <td th:text="${product.clothEntity.name}"></td>
+                            <td th:text="${product.quantity}"></td>
+                            <td th:text="${product.snapshotPrice}"></td>
+                        </tr>
+                    </table>
+                    <p class="card-text justify-content-center">Tổng tiền: <span th:text="${#aggregates.sum(item.products.![snapshotPrice])}"></span></p>
                     <!-- You can add more details here -->
                 </div>
             </div>

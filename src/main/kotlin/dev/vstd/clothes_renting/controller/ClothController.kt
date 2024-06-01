@@ -6,20 +6,25 @@ import dev.vstd.clothes_renting.data.entity.SellerEntity
 import dev.vstd.clothes_renting.data.service.ClothService
 import dev.vstd.clothes_renting.data.service.SellerService
 import jakarta.validation.Valid
+import lombok.extern.slf4j.Slf4j
+import org.hibernate.query.sqm.tree.SqmNode.log
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import java.util.logging.Logger
+
 
 @Controller
 @RequestMapping("/cloth")
+@Slf4j
 class ClothController(private val clothService: ClothService, private val sellerService: SellerService) {
-    private val logger = Logger.getLogger(ClothController::class.java.name)
+    private val logger = LoggerFactory.getLogger(ClothController::class.java)
 
     @GetMapping("")
     fun dashboard(model: Model): String {
+        log.info("Hello")
         val records = clothService.getAllClothes()
         model[Constants.ATTR_RECORDS] = records
         return "dashboard_clothes"
@@ -43,7 +48,7 @@ class ClothController(private val clothService: ClothService, private val seller
 
     @GetMapping("/delete")
     fun deleteCloth(@RequestParam id: String): String {
-        logger.log(java.util.logging.Level.INFO, "Deleting cloth with id: $id")
+        logger.debug("Deleting cloth with id: $id")
         clothService.deleteCloth(id.toLong())
         return "redirect:/cloth"
     }

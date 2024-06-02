@@ -34,10 +34,11 @@ class ReportController(private val reportService: ReportService) {
     fun getSales(
         model: Model,
         @RequestParam limit: Int = 5,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate = LocalDate.now()
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) from: LocalDate = LocalDate.now(),
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) to: LocalDate = LocalDate.now(),
     ): String {
-        val start = date.withDayOfMonth(1)
-        val end = date.withDayOfMonth(date.lengthOfMonth())
+        val start = from.withDayOfMonth(1)
+        val end = to.withDayOfMonth(to.lengthOfMonth())
         val ratings = reportService.getSellerSalesRatings(limit, start, end)
         model[Constants.ATTR_SELLER_RATINGS] = ratings
         return "dashboard_report_seller_sales"
@@ -46,13 +47,15 @@ class ReportController(private val reportService: ReportService) {
     @GetMapping("report-sales/excel")
     fun downloadExcel(
         @RequestParam(required = true) limit: Int,
-        @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) from: LocalDate,
+        @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) to: LocalDate,
         model: Model
     ): ResponseEntity<Resource> {
-        val start = date.withDayOfMonth(1)
-        val end = date.withDayOfMonth(date.lengthOfMonth())
+        val start = from.withDayOfMonth(1)
+        val end = to.withDayOfMonth(to.lengthOfMonth())
         val ratings = reportService.getSellerSalesRatings(limit, start, end)
-        val outputDownloadPath = reportExcelGenerator.generate(limit, date, ratings)
+        val dateString = "T${from.monthValue}/${from.year}-T${to.monthValue}/${to.year}"
+        val outputDownloadPath = reportExcelGenerator.generate(limit, dateString, ratings)
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.xlsx")
             .body(FileSystemResource(outputDownloadPath))

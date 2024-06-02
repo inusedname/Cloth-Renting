@@ -17,7 +17,6 @@ import java.net.URLEncoder
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 
@@ -49,10 +48,10 @@ class ReportExcelGenerator {
                         labels = labels,
                         datasets = listOf(QuickChartDataset(data = data))
                     ),
-                    options = ChartOption(ChartOption.ChartTitle(text = "Doanh thu theo nhà cung cấp, tháng $month"))
+                    options = ChartOption(ChartOption.ChartTitle(text = "Doanh thu theo nhà cung cấp: $month"))
                 )
             }
-            fun getConsuming(records: List<ReportService.SellerSalesRating>, month: String): QuickChartPiePayload {
+            fun getConsuming(records: List<ReportService.SellerSalesRating>, dateString: String): QuickChartPiePayload {
                 val labels = records.map { it.name }
                 val data = records.map { it.totalOrders.toInt() }
                 return QuickChartPiePayload(
@@ -60,18 +59,18 @@ class ReportExcelGenerator {
                         labels = labels,
                         datasets = listOf(QuickChartDataset(data = data))
                     ),
-                    options = ChartOption(ChartOption.ChartTitle(text = "Số đơn hàng đã bán theo nhà cung cấp, tháng $month"))
+                    options = ChartOption(ChartOption.ChartTitle(text = "Số đơn hàng đã bán theo nhà cung cấp: $dateString"))
                 )
             }
         }
     }
-    private fun generateChartImage(records: List<ReportService.SellerSalesRating>, localDate: LocalDate) {
+    private fun generateChartImage(records: List<ReportService.SellerSalesRating>, dateString: String) {
 
         val gson = Gson()
-        val salesPayload = gson.toJson(QuickChartPiePayload.getSales(records, "${localDate.month}/${localDate.year}")).apply {
+        val salesPayload = gson.toJson(QuickChartPiePayload.getSales(records, dateString)).apply {
             URLEncoder.encode(this, "UTF-8")
         }
-        val consumingPayload = gson.toJson(QuickChartPiePayload.getConsuming(records, "${localDate.month}/${localDate.year}")).apply {
+        val consumingPayload = gson.toJson(QuickChartPiePayload.getConsuming(records, dateString)).apply {
             URLEncoder.encode(this, "UTF-8")
         }
         val chartUrl = "https://quickchart.io/chart?c="
@@ -106,7 +105,7 @@ class ReportExcelGenerator {
             }
         }
     }
-    fun generate(top: Int, month: LocalDate, records: List<ReportService.SellerSalesRating>): String {
+    fun generate(top: Int, dateString: String, records: List<ReportService.SellerSalesRating>): String {
         val workbook = XSSFWorkbook()
 
         val timesNewRomanFont = {
@@ -168,7 +167,7 @@ class ReportExcelGenerator {
 
             val dateRow = createRow(countRows++)
             val dateCell = dateRow.createCell(0)
-            dateCell.setCellValue("Top $top đối tác có doanh thu cao nhất tháng ${month.monthValue}/${month.year}")
+            dateCell.setCellValue("Top $top đối tác có doanh thu cao nhất: $dateString")
             dateCell.cellStyle = subtitleStyle
             addMergedRegion(CellRangeAddress(2, 2, 0, 3))
         }
@@ -205,7 +204,7 @@ class ReportExcelGenerator {
         sheet.setColumnWidth(3, 256 * 18)
 
         // charts
-        generateChartImage(records, month)
+        generateChartImage(records, dateString)
         // Add chart images to the Excel file
         val salesChartPath = Paths.get("chart-sales.jpeg")
         val consumingChartPath = Paths.get("chart-consuming.jpeg")

@@ -29,8 +29,12 @@
     <div class="mt-5">
         <form class="row mt-3 form-horizontal">
             <div class="col-md-3">
-                <label for="month-input" class="hide-print">Chọn tháng:</label>
-                <input type="month" class="form-control" name="date" id="month-input" th:value="${param['date']}">
+                <label for="month-from" class="hide-print">Chọn tháng bắt đầu:</label>
+                <input type="month" class="form-control" name="from" id="month-from" th:value="${param['from']}">
+            </div>
+            <div class="col-md-3">
+                <label for="month-to" class="hide-print">Chọn tháng kết thúc:</label>
+                <input type="month" class="form-control" name="to" id="month-to" th:value="${param['to']}">
             </div>
             <div class="col-md-3">
                 <label for="limit" class="hide-print">Chọn số lượng:</label>
@@ -54,6 +58,7 @@
                     <th>Tên nhà cung cấp</th>
                     <th>Số đơn hàng đã bán được</th>
                     <th>Tổng doanh thu</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,6 +67,7 @@
                     <td th:text="${sellerRating.name}"></td>
                     <td th:text="${sellerRating.totalOrders}"></td>
                     <td th:text="${sellerRating.totalSales}"></td>
+                    <td><a class="btn btn-info" th:href="@{/order/filter(tenNhaCungCap=${sellerRating.name}, from=${param['from']}, to=${param['to']})}">Xem chi tiết</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -77,7 +83,7 @@
     </div>
     <div class="row mt-3 hide-print">
         <div class="col-md-12 text-center">
-            <a type="button" class="btn btn-success" th:href="@{/report-sales/excel(limit=${param['limit']}, date=${param['date']})}">Xuất dưới dạng Excel</a>
+            <a type="button" class="btn btn-success" th:href="@{/report-sales/excel(limit=${param['limit']}, from=${param['from']}, to=${param['to']})}">Xuất dưới dạng Excel</a>
             <button id="btn-print-pdf" type="button" class="btn btn-danger">Xuất dưới dạng PDF</button>
         </div>
     </div>
@@ -88,10 +94,21 @@
 <script th:inline="javascript">
     /////////////////////
     // Init first month
-    const monthInput = document.getElementById('month-input');
-    if (!monthInput.value) {
-        monthInput.value = new Date().toISOString().substring(0, 7);
+    const monthFrom = document.getElementById('month-from');
+    const monthTo = document.getElementById('month-to');
+    if (!monthFrom.value) {
+        monthFrom.value = new Date().toISOString().substring(0, 7);
+        monthTo.value = monthFrom.value;
     }
+    if (!window.location.href.includes('?')) {
+        window.location.href = '/report-sales?from=' + monthFrom.value + '&to=' + monthTo.value + "&limit=5";
+    }
+
+    $('#month-to').on('change', () => {
+        if (monthTo.value < monthFrom.value) {
+            monthTo.value = monthFrom.value;
+        }
+    });
 
     $('#btn-print-pdf').on('click', () => {
         console.log('print pdf')
@@ -126,7 +143,7 @@
                 },
                 title: {
                     display: true,
-                    text: '# đơn hàng đã bán của theo nhà cung cấp, tháng ' + monthInput.value
+                    text: '# đơn hàng đã bán của theo nhà cung cấp:' + monthFrom.value + " đến " + monthTo.value
                 }
             }
         },
@@ -159,7 +176,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Doanh thu của theo nhà cung cấp, tháng ' + monthInput.value
+                    text: 'Doanh thu của theo nhà cung cấp:' + monthFrom.value + " đến " + monthTo.value
                 }
             }
         },

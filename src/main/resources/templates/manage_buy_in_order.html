@@ -16,7 +16,7 @@
 <body>
 <div class="container my-3">
     <a class="btn-back btn btn-secondary">Quay lại</a>
-    <h2 class="text-center">Đơn hàng</h2>
+    <h2 class="text-center" th:text="${param['tenNhaCungCap'] != null ? param['tenNhaCungCap'] : 'Lịch sử đặt hàng'}"></h2>
     <div class="row">
         <div class="col-md-6" th:each="item : ${records}">
             <div class="card">
@@ -37,7 +37,7 @@
                             <td th:text="${product.snapshotPrice}"></td>
                         </tr>
                     </table>
-                    <p class="card-text justify-content-center">Tổng tiền: <span th:text="${#aggregates.sum(item.products.![snapshotPrice])}"></span></p>
+                    <p class="card-text justify-content-center">Tổng tiền: <span th:text="${#aggregates.sum(item.products.![snapshotPrice*quantity])}"></span></p>
                     <!-- You can add more details here -->
                 </div>
             </div>
